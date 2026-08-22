@@ -182,8 +182,8 @@ export default function AdminDashboard() {
                         <table className="w-full text-left border-collapse">
                             <thead>
                                 <tr className="bg-gray-50/50">
-                                    <th className="px-6 py-4 text-xs font-semibold tracking-wider text-gray-500 uppercase border-b border-gray-200">Employee ID</th>
-                                    <th className="px-6 py-4 text-xs font-semibold tracking-wider text-gray-500 uppercase border-b border-gray-200">Email</th>
+                                    <th className="px-6 py-4 text-xs font-semibold tracking-wider text-gray-500 uppercase border-b border-gray-200">Employee Details</th>
+                                    <th className="px-6 py-4 text-xs font-semibold tracking-wider text-gray-500 uppercase border-b border-gray-200">Contact</th>
                                     <th className="px-6 py-4 text-xs font-semibold tracking-wider text-gray-500 uppercase border-b border-gray-200">Role</th>
                                     <th className="px-6 py-4 text-xs font-semibold tracking-wider text-gray-500 uppercase border-b border-gray-200">Status</th>
                                 </tr>
@@ -202,7 +202,12 @@ export default function AdminDashboard() {
                                             onClick={() => handleRowClick(emp._id)}
                                             className="hover:bg-gray-50 transition-colors cursor-pointer"
                                         >
-                                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{emp.employeeId}</td>
+                                            <td className="px-6 py-4 whitespace-nowrap">
+                                                <div className="flex flex-col">
+                                                    <span className="text-sm font-bold text-gray-900 group-hover:text-primary">{emp.profile?.name || 'Unnamed'}</span>
+                                                    <span className="text-xs text-gray-500">{emp.employeeId}</span>
+                                                </div>
+                                            </td>
                                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{emp.email}</td>
                                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600 capitalize">{emp.role}</td>
                                             <td className="px-6 py-4 whitespace-nowrap">

@@ -36,7 +36,10 @@ export default function Profile() {
             setLoading(true);
             setError('');
             try {
-                const response = await api.get(`/api/profile/${profileId}`);
+                const token = localStorage.getItem('token');
+                const response = await api.get(`/api/profile/${profileId}`, {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
                 if (response.data.success) {
                     setProfileData(response.data.data);
 
@@ -92,8 +95,10 @@ export default function Profile() {
             if (profileId === loggedInEmployeeId && currentRole === 'employee') {
                 url = `/api/profile`;
             }
-
-            const response = await api.put(url, formData);
+            const token = localStorage.getItem('token');
+            const response = await api.put(url, formData, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
             if (response.data.success) {
                 setSuccess('Profile updated successfully!');
                 setProfileData(response.data.data);

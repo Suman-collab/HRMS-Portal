@@ -63,11 +63,13 @@ const Login = () => {
 
             let employeeId = '';
             let email = '';
+            let userId = '';
 
             // Attempt to get employeeId/email from user object
             if (user) {
                 employeeId = user.employeeId;
                 email = user.email;
+                userId = user._id;
             } else if (token) {
                 // Fallback to decode JWT payload safely
                 try {
@@ -81,6 +83,7 @@ const Login = () => {
             if (token) localStorage.setItem('token', token);
             if (role) localStorage.setItem('role', role);
             if (employeeId) localStorage.setItem('employeeId', employeeId);
+            if (userId) localStorage.setItem('userId', userId);
             if (email) localStorage.setItem('email', email);
 
             // Add to axios default headers for future requests

@@ -1,27 +1,43 @@
+import mongoose from 'mongoose';
 import EmployeeProfile from '../models/EmployeeProfile.js';
+import User from '../models/User.js';
 
 export const getProfile = async (req, res) => {
     try {
-        const { id } = req.params; // this id is the User._id
+        const { id } = req.params;
+
+        let userToFetch = null;
+        if (mongoose.Types.ObjectId.isValid(id)) {
+            userToFetch = await User.findById(id);
+        }
+        if (!userToFetch) {
+            userToFetch = await User.findOne({ employeeId: id });
+        }
+
+        if (!userToFetch) {
+            return res.status(404).json({ success: false, message: 'User not found' });
+        }
+
+        const actualUserId = userToFetch._id;
 
         // Check authorization: must be admin or the requested user
-        if (req.user.role !== 'admin' && req.user._id.toString() !== id) {
+        if (req.user.role !== 'admin' && req.user._id.toString() !== actualUserId.toString()) {
             return res.status(403).json({
                 success: false,
                 message: 'Forbidden: You can only access your own profile',
             });
         }
 
-        let profile = await EmployeeProfile.findOne({ userId: id }).populate({
+        let profile = await EmployeeProfile.findOne({ userId: actualUserId }).populate({
             path: 'userId',
             select: 'employeeId email role',
         });
 
         if (!profile) {
             profile = await EmployeeProfile.create({
-                userId: id,
+                userId: actualUserId,
                 personalDetails: { name: 'Unknown' },
-                jobDetails: { designation: '', department: '' },
+                jobDetails: { designation: 'TBD', department: 'TBD' },
                 salaryStructure: { basic: 0, allowances: 0, deductions: 0 },
                 documents: []
             });
@@ -44,22 +60,35 @@ export const getProfile = async (req, res) => {
 export const updateProfile = async (req, res) => {
     try {
         const { id } = req.params;
+        let userToFetch = null;
+        if (mongoose.Types.ObjectId.isValid(id)) {
+            userToFetch = await User.findById(id);
+        }
+        if (!userToFetch) {
+            userToFetch = await User.findOne({ employeeId: id });
+        }
+
+        if (!userToFetch) {
+            return res.status(404).json({ success: false, message: 'User not found' });
+        }
+
+        const actualUserId = userToFetch._id;
 
         // Check authorization: must be admin or the requested user
-        if (req.user.role !== 'admin' && req.user._id.toString() !== id) {
+        if (req.user.role !== 'admin' && req.user._id.toString() !== actualUserId.toString()) {
             return res.status(403).json({
                 success: false,
                 message: 'Forbidden: You can only update your own profile',
             });
         }
 
-        let profile = await EmployeeProfile.findOne({ userId: id });
+        let profile = await EmployeeProfile.findOne({ userId: actualUserId });
 
         if (!profile) {
             profile = await EmployeeProfile.create({
-                userId: id,
+                userId: actualUserId,
                 personalDetails: { name: 'Unknown' },
-                jobDetails: { designation: '', department: '' },
+                jobDetails: { designation: 'TBD', department: 'TBD' },
                 salaryStructure: { basic: 0, allowances: 0, deductions: 0 },
                 documents: []
             });

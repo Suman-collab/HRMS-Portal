@@ -36,7 +36,7 @@ async function seedData() {
         await LeaveRequest.deleteMany({ employeeId: { $in: userIds } });
         await Payroll.deleteMany({ employeeId: { $in: userIds } });
 
-        const hashedPassword = await bcrypt.hash('password123', 10);
+        const hashedPassword = await bcrypt.hash('employee@123', 10);
 
         console.log('Creating new dummy employees...');
 
@@ -150,7 +150,7 @@ async function seedData() {
         console.log('Dummy data seeded successfully!');
         console.log('You can login as employees with:');
         dummyNames.forEach(dn => {
-            console.log(`Email: ${dn.first.toLowerCase()}@dayflow.com | Password: password123`);
+            console.log(`Email: ${dn.first.toLowerCase()}@dayflow.com | Password: employee@123`);
         });
 
         process.exit(0);
