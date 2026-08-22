@@ -58,11 +58,29 @@ const Login = () => {
 
         try {
             const response = await api.post('/api/auth/login', formData);
-            const { token, role } = response.data; // Assuming backend returns token and role
+            const { token, role, user } = response.data; // Assuming backend returns token, role, user
+
+            let employeeId = '';
+            let email = '';
+
+            // Attempt to get employeeId/email from user object
+            if (user) {
+                employeeId = user.employeeId;
+                email = user.email;
+            } else if (token) {
+                // Fallback to decode JWT payload safely
+                try {
+                    const payload = JSON.parse(atob(token.split('.')[1]));
+                    employeeId = payload.employeeId || '';
+                    email = payload.email || '';
+                } catch (e) { }
+            }
 
             // Store in localStorage for this stage
             if (token) localStorage.setItem('token', token);
             if (role) localStorage.setItem('role', role);
+            if (employeeId) localStorage.setItem('employeeId', employeeId);
+            if (email) localStorage.setItem('email', email);
 
             // Add to axios default headers for future requests
             if (token) {
