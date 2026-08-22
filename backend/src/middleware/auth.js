@@ -56,7 +56,7 @@ export const authorize = (...roles) => {
                 message: `Forbidden: User role '${req.user.role}' is not authorized to access this resource`,
             });
         }
-
+        
         next();
     };
 };

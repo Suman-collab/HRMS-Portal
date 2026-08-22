@@ -30,23 +30,29 @@ function App() {
         <Route path="/signup" element={<Signup />} />
 
         {/* Protected App Routes wrapped in Layout Shell */}
-        <Route element={<ProtectedRoute />}>
-          <Route element={<Layout />}>
-            {/* Default redirect to /dashboard */}
-            <Route path="/" element={<Navigate to="/dashboard" replace />} />
+        <Route element={<Layout />}>
 
-            {/* Employee Portal Routes */}
+          {/* Base Protected Routes (All authenticated users can pass here, but we redirect / to their role dashboard) */}
+          <Route element={<ProtectedRoute />}>
+            <Route path="/" element={<Navigate to="/dashboard" replace />} />
+          </Route>
+
+          {/* Employee ONLY Routes */}
+          <Route element={<ProtectedRoute role="employee" />}>
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/attendance" element={<Attendance />} />
             <Route path="/leave" element={<Leave />} />
             <Route path="/payroll" element={<Payroll />} />
+          </Route>
 
-            {/* Admin Portal Routes */}
+          {/* Admin ONLY Routes */}
+          <Route element={<ProtectedRoute role="admin" />}>
             <Route path="/admin/dashboard" element={<AdminDashboard />} />
             <Route path="/admin/employees" element={<EmployeeList />} />
             <Route path="/admin/leave-approvals" element={<LeaveApprovals />} />
           </Route>
+
         </Route>
 
         {/* 404 Catch-All Route */}
