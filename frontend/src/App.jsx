@@ -10,8 +10,10 @@ import Login from './auth/pages/Login.jsx';
 import Signup from './auth/pages/Signup.jsx';
 
 // Employee Pages
+// Shared Pages
+import Profile from './shared/pages/Profile.jsx';
+
 import Dashboard from './employee/pages/Dashboard.jsx';
-import Profile from './employee/pages/Profile.jsx';
 import Attendance from './employee/pages/Attendance.jsx';
 import Leave from './employee/pages/Leave.jsx';
 import Payroll from './employee/pages/Payroll.jsx';
@@ -20,6 +22,8 @@ import Payroll from './employee/pages/Payroll.jsx';
 import AdminDashboard from './admin/pages/AdminDashboard.jsx';
 import EmployeeList from './admin/pages/EmployeeList.jsx';
 import LeaveApprovals from './admin/pages/LeaveApprovals.jsx';
+import AdminAttendance from './admin/pages/AdminAttendance.jsx';
+import AdminPayroll from './admin/pages/AdminPayroll.jsx';
 
 function App() {
   return (
@@ -50,7 +54,10 @@ function App() {
           <Route element={<ProtectedRoute role="admin" />}>
             <Route path="/admin/dashboard" element={<AdminDashboard />} />
             <Route path="/admin/employees" element={<EmployeeList />} />
+            <Route path="/admin/employees/:id" element={<Profile />} />
+            <Route path="/admin/attendance" element={<AdminAttendance />} />
             <Route path="/admin/leave-approvals" element={<LeaveApprovals />} />
+            <Route path="/admin/payroll/:id" element={<AdminPayroll />} />
           </Route>
 
         </Route>

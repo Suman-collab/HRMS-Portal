@@ -8,6 +8,7 @@ export default function AdminDashboard() {
     const [pagination, setPagination] = useState({ page: 1, limit: 10, totalPages: 1 });
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
+    const [analytics, setAnalytics] = useState(null);
 
     const fetchEmployees = async (page = 1) => {
         setLoading(true);
@@ -36,8 +37,16 @@ export default function AdminDashboard() {
         }
     };
 
+    const fetchAnalytics = async () => {
+        try {
+            const res = await api.get('/api/admin/analytics');
+            setAnalytics(res.data.data);
+        } catch (err) { console.error('Failed analytics', err); }
+    };
+
     useEffect(() => {
         fetchEmployees(pagination.page);
+        fetchAnalytics();
         // eslint-disable-next-line
     }, [pagination.page]);
 
@@ -161,22 +170,29 @@ export default function AdminDashboard() {
 
             <div style={styles.widgetGrid}>
                 <div style={styles.widgetCard}>
-                    <div style={styles.widgetTitle}>Attendance Summary</div>
+                    <div style={styles.widgetTitle}>Attendance Summary (30 days)</div>
                     <div style={{ color: '#6b7280', fontSize: '0.875rem' }}>
-                        <p style={{ marginBottom: '0.5rem' }}><strong>Online Today:</strong> 42 / 50 Employees</p>
-                        <p style={{ marginBottom: '0.5rem' }}><strong>Late Arrivals:</strong> 3</p>
-                        <p><strong>Absent:</strong> 5</p>
+                        {analytics ? Object.entries(analytics.attendanceSummary).map(([k, v]) => (
+                            <div key={k} style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
+                                <strong>{k}:</strong> <span>{v}</span>
+                            </div>
+                        )) : <p>Loading Analytics...</p>}
                     </div>
                 </div>
 
                 <div style={styles.widgetCard}>
-                    <div style={styles.widgetTitle}>Pending Leave Approvals</div>
+                    <div style={styles.widgetTitle}>Leave Stats</div>
                     <div style={{ color: '#6b7280', fontSize: '0.875rem' }}>
-                        <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
-                            <li style={{ padding: '0.5rem 0', borderBottom: '1px solid #f3f4f6' }}>John Doe (Sick Leave) - 2 days</li>
-                            <li style={{ padding: '0.5rem 0', borderBottom: '1px solid #f3f4f6' }}>Sarah Connor (Vacation) - 5 days</li>
-                            <li style={{ padding: '0.5rem 0' }}>Mike Smith (Personal) - 1 day</li>
-                        </ul>
+                        {analytics ? Object.entries(analytics.leaveStats).map(([type, stats]) => (
+                            <div key={type} style={{ marginBottom: '1rem' }}>
+                                <strong>{type} Leaves:</strong>
+                                <ul style={{ listStyle: 'none', margin: '0.25rem 0 0 0', padding: 0 }}>
+                                    <li>Pending: {stats.Pending}</li>
+                                    <li>Approved: {stats.Approved}</li>
+                                    <li>Rejected: {stats.Rejected}</li>
+                                </ul>
+                            </div>
+                        )) : <p>Loading Analytics...</p>}
                     </div>
                 </div>
             </div>
