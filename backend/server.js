@@ -4,6 +4,9 @@ import cors from 'cors';
 import morgan from 'morgan';
 import connectDB from './src/config/db.js';
 
+// Route files
+import adminRoutes from './src/routes/adminRoutes.js';
+
 // Load environment variables
 dotenv.config();
 
@@ -23,6 +26,9 @@ if (process.env.NODE_ENV === 'development' || !process.env.NODE_ENV) {
 } else {
   app.use(morgan('combined'));
 }
+
+// Mount Routers
+app.use('/api/admin', adminRoutes);
 
 // Health Check / API Root
 app.get('/api/health', (req, res) => {
