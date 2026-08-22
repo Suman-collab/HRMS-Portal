@@ -6,6 +6,7 @@ import connectDB from './src/config/db.js';
 
 // Route files
 import adminRoutes from './src/routes/adminRoutes.js';
+import profileRoutes from './src/routes/profileRoutes.js';
 
 // Load environment variables
 dotenv.config();
@@ -29,6 +30,7 @@ if (process.env.NODE_ENV === 'development' || !process.env.NODE_ENV) {
 
 // Mount Routers
 app.use('/api/admin', adminRoutes);
+app.use('/api/profile', profileRoutes);
 
 // Health Check / API Root
 app.get('/api/health', (req, res) => {
