@@ -1,197 +1,466 @@
-# 🚀 Dayflow — Human Resource Management System (HRMS)
+# 🚀 Dayflow — Human Resource Management System
 
-**Dayflow** is a modern, full-stack **Human Resource Management System (HRMS)** built with the **MERN stack**. It streamlines employee management, attendance tracking, leave processing, payroll visibility, authentication, and role-based organizational workflows through a centralized platform.
+Dayflow is a full-stack **Human Resource Management System (HRMS)** built with the **MERN stack**. It provides a centralized platform for managing essential HR operations including employee authentication, profile management, attendance tracking, leave management, payroll visibility, and administrative analytics.
 
-## ✨ Key Features
+The system uses **role-based access control** to provide separate experiences for **Employees** and **Admins**. Employees can manage their own profile, attendance, leave requests, and payroll information, while Admins can manage employee records, review attendance and leave activity, update payroll information, and view workforce analytics.
 
-* 🔐 **Authentication & RBAC** — Secure JWT + bcrypt authentication with Admin, HR Manager, and Employee roles.
-* 📊 **Role-Based Dashboards** — Customized dashboards with workforce analytics, attendance summaries, approvals, leave balances, and payroll information.
-* 👤 **Employee Management** — Employee directory, profiles, departments, designations, salary details, emergency contacts, and document management.
-* ⏱️ **Attendance Management** — Clock-in/out, attendance status, work-hour calculation, shifts, and weekly/monthly reports.
-* 🌴 **Leave Management** — Leave applications, multi-level approval workflows, configurable leave types, balance tracking, and audit history.
-* 💰 **Payroll Management** — Salary breakdowns, deductions, allowances, net salary, salary history, payment status, and payslip generation.
-* 🔎 **Search & Filtering** — Quickly find and manage employee records.
-* 📱 **Modern UI** — Responsive React-based interface with reusable components and modern CSS.
-* 🛡️ **Secure API Architecture** — Middleware-based authentication, authorization, validation, and error handling.
+---
+
+## ✨ Features
+
+### 🔐 Authentication & Authorization
+
+* Employee/Admin signup
+* Email verification
+* Secure login
+* JWT-based authentication
+* Password hashing using bcrypt
+* Role-based authorization middleware
+* Protected API routes and pages
+
+### 👤 Profile Management
+
+* Employee profile viewing
+* Profile editing
+* Role-restricted profile access
+* Secure access to personal employee information
+
+### ⏱️ Attendance Management
+
+* Employee check-in
+* Employee check-out
+* Attendance history
+* Employee attendance view
+* Admin attendance view
+* Attendance-based analytics
+
+### 🌴 Leave Management
+
+* Employees can apply for leave
+* Admins can review leave requests
+* Approve/reject leave requests
+* Leave status tracking
+* Email notifications when leave status changes
+
+### 💰 Payroll Management
+
+* Employee read-only payroll view
+* Admin payroll editing
+* Salary information management
+* Salary slip generation
+* PDF salary slip download
+
+### 📊 Admin Dashboard & Analytics
+
+* Employee list
+* Employee management
+* Attendance analytics
+* Leave analytics
+* Workforce overview
+* Charts and visual reports using Recharts
+
+---
 
 ## 🛠️ Tech Stack
 
-**Frontend**
+| Category               | Technology            |
+| ---------------------- | --------------------- |
+| Frontend               | React                 |
+| Build Tool             | Vite                  |
+| Styling                | Tailwind CSS          |
+| Backend                | Node.js               |
+| API Framework          | Express.js            |
+| Database               | MongoDB               |
+| Authentication         | JWT                   |
+| Password Security      | bcrypt                |
+| Email Service          | Nodemailer            |
+| Analytics Charts       | Recharts              |
+| Salary Slip Generation | PDFKit                |
+| Architecture           | MERN Stack + REST API |
 
-* React.js
-* Vite
-* Modern CSS
-* React Context API
+---
 
-**Backend**
+## 🏗️ Application Architecture
 
-* Node.js
-* Express.js
-* REST APIs
-* JWT Authentication
-* bcrypt
+```text
+┌──────────────────────┐
+│      React + Vite    │
+│      Frontend        │
+└──────────┬───────────┘
+           │
+           │ REST API
+           ▼
+┌──────────────────────┐
+│    Express + Node.js │
+│       Backend        │
+└──────────┬───────────┘
+           │
+     ┌─────┴─────┐
+     ▼           ▼
+┌──────────┐  ┌──────────────┐
+│ MongoDB  │  │ Email / PDF  │
+│ Database │  │ Services     │
+└──────────┘  └──────────────┘
+```
 
-**Database**
-
-* MongoDB
-* Mongoose
-
-**Architecture**
-
-* MERN Stack
-* Monorepo
-* Role-Based Access Control (RBAC)
-* RESTful API Architecture
-
-## 👥 User Roles
-
-### 🔴 Admin
-
-* Complete system access
-* User and employee management
-* Organization configuration
-* Reports and analytics
-* System monitoring
-
-### 🟡 HR Manager
-
-* Employee onboarding and management
-* Attendance monitoring
-* Leave approval/rejection
-* Payroll processing
-* Employee reports
-
-### 🟢 Employee
-
-* Personal profile management
-* Check-in/check-out
-* Leave requests
-* Attendance history
-* Leave balance tracking
-* Payslip viewing
+---
 
 ## 📁 Project Structure
 
 ```text
-HRMS PORTAL/
+HRMS-Portal/
+│
 ├── backend/
-│   ├── src/
-│   │   ├── config/
-│   │   ├── controllers/
-│   │   ├── middleware/
-│   │   ├── models/
-│   │   ├── routes/
-│   │   └── utils/
-│   ├── .env.example
-│   ├── package.json
-│   └── server.js
+│   ├── config/          # Database and application configuration
+│   ├── controllers/     # Business logic for API requests
+│   ├── middleware/      # Authentication, authorization and request middleware
+│   ├── models/          # MongoDB/Mongoose data models
+│   ├── routes/          # REST API route definitions
+│   ├── .env.example     # Backend environment variable template
+│   ├── package.json     # Backend dependencies and scripts
+│   └── server.js        # Backend application entry point
 │
 ├── frontend/
-│   ├── public/
 │   ├── src/
-│   │   ├── assets/
-│   │   ├── components/
-│   │   ├── context/
-│   │   ├── hooks/
-│   │   ├── pages/
-│   │   ├── services/
-│   │   ├── utils/
-│   │   ├── App.jsx
-│   │   ├── index.css
-│   │   └── main.jsx
-│   ├── .env.example
-│   ├── index.html
-│   ├── package.json
-│   └── vite.config.js
+│   │   ├── auth/        # Login, signup and authentication functionality
+│   │   ├── employee/    # Employee dashboard and employee features
+│   │   ├── admin/       # Admin dashboard, management and analytics
+│   │   └── shared/      # Shared components, utilities and common UI
+│   │
+│   ├── public/          # Static frontend assets
+│   ├── .env.example     # Frontend environment variable template
+│   ├── package.json     # Frontend dependencies and scripts
+│   └── vite.config.js   # Vite configuration
 │
-├── .gitignore
-├── package.json
-└── README.md
+├── .gitignore           # Files and folders excluded from Git
+├── package.json         # Root project configuration
+└── README.md            # Project documentation
 ```
 
-## ⚙️ Installation & Setup
+> The exact file names inside `backend/` and `frontend/src/` may vary as the project evolves. The structure above describes the major responsibility of each application layer.
 
-### Prerequisites
+---
 
-* Node.js **v18+**
-* MongoDB or MongoDB Atlas
-* npm
+## 🔑 Role-Based Access
 
-### 1. Clone the Repository
+Dayflow provides two primary roles:
+
+### 👨‍💼 Admin
+
+Admins can:
+
+* View and manage employees
+* View attendance records
+* Review and process leave requests
+* Approve or reject leave applications
+* Edit payroll information
+* Generate salary slips
+* View attendance analytics
+* View leave analytics
+
+### 👨‍💻 Employee
+
+Employees can:
+
+* Create an account
+* Verify their email
+* Login securely
+* View and edit their permitted profile information
+* Check in and check out
+* View attendance history
+* Apply for leave
+* Track leave status
+* Receive leave-status email notifications
+* View payroll information
+* Download salary slips
+
+---
+
+# ⚙️ Setup & Installation
+
+## Prerequisites
+
+Before running Dayflow locally, make sure the following are installed:
+
+* **Node.js** — recommended Node.js 18+
+* **npm**
+* **MongoDB** — local MongoDB installation or MongoDB Atlas
+* A working SMTP/email account for email verification and leave notifications
+
+Check your Node.js and npm versions:
 
 ```bash
-git clone <your-repository-url>
-cd "HRMS PORTAL"
+node --version
+npm --version
 ```
 
-### 2. Install Backend Dependencies
+---
+
+## 1. Clone the Repository
+
+```bash
+git clone https://github.com/Suman-collab/HRMS-Portal.git
+cd HRMS-Portal
+```
+
+---
+
+## 2. Backend Setup
+
+Open a terminal and run:
 
 ```bash
 cd backend
 npm install
 ```
 
-### 3. Install Frontend Dependencies
+Copy the environment template:
+
+### Windows
 
 ```bash
-cd ../frontend
-npm install
+copy .env.example .env
 ```
 
-### 4. Configure Environment Variables
-
-Create `.env` files using the provided examples:
+### macOS / Linux
 
 ```bash
-backend/.env.example
-frontend/.env.example
+cp .env.example .env
 ```
 
-Configure your MongoDB connection, JWT secret, API URL, and other required environment variables.
+Open `backend/.env` and provide the required configuration values.
 
-### 5. Run the Application
-
-From the project root:
+Then start the backend:
 
 ```bash
 npm run dev
 ```
 
-Or run frontend and backend separately according to the available scripts in each `package.json`.
+The backend should now be running on the port configured by the project.
 
-## 🔒 Security
+---
 
-Dayflow implements:
+## 3. Frontend Setup
+
+Open a **second terminal** from the project root:
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+Vite will display the local frontend URL in the terminal, normally:
+
+```text
+http://localhost:5173
+```
+
+---
+
+## ⚠️ Important: Run Both Applications
+
+For local development, the frontend and backend must run **concurrently in two terminals**.
+
+### Terminal 1 — Backend
+
+```bash
+cd backend
+npm run dev
+```
+
+### Terminal 2 — Frontend
+
+```bash
+cd frontend
+npm run dev
+```
+
+The React frontend communicates with the Express backend through the configured API endpoints.
+
+---
+
+# 🔐 Environment Variables
+
+The following variables should be configured according to the project's `.env.example` file.
+
+> **Never commit real passwords, JWT secrets, SMTP credentials, API keys, or other sensitive values to GitHub.**
+
+## Backend Environment Variables
+
+| Variable         | Description                                                   |
+| ---------------- | ------------------------------------------------------------- |
+| `MONGO_URI`      | MongoDB connection string                                     |
+| `JWT_SECRET`     | Secret key used to sign and verify JWT tokens                 |
+| `JWT_EXPIRES_IN` | JWT token expiration duration                                 |
+| `SMTP_HOST`      | SMTP server hostname used for sending emails                  |
+| `SMTP_PORT`      | SMTP server port                                              |
+| `SMTP_USER`      | SMTP account username/email                                   |
+| `SMTP_PASS`      | SMTP account password or application-specific SMTP credential |
+
+Example structure:
+
+```env
+MONGO_URI=<your-mongodb-connection-string>
+JWT_SECRET=<your-jwt-secret>
+JWT_EXPIRES_IN=<token-expiration-duration>
+
+SMTP_HOST=<your-smtp-host>
+SMTP_PORT=<your-smtp-port>
+SMTP_USER=<your-smtp-username>
+SMTP_PASS=<your-smtp-password>
+```
+
+## Frontend Environment Variables
+
+If the frontend `.env.example` contains an API/base URL variable, configure it with the local backend address required by the frontend.
+
+For example:
+
+```env
+VITE_API_URL=<your-backend-api-url>
+```
+
+Use the **exact variable name present in `frontend/.env.example`** if it differs from the example above.
+
+---
+
+# 🔒 Security
+
+Dayflow uses several mechanisms to protect application data and API access:
 
 * JWT-based authentication
-* Password hashing with bcrypt
+* bcrypt password hashing
 * Role-based authorization
 * Protected API routes
-* Request validation
-* Centralized error handling
+* Email verification
 * Environment-based secret management
+* Server-side authorization checks
+* Restricted employee/admin operations
 
-## 🎯 Project Goals
+Sensitive configuration values should always remain in environment variables and should not be committed to the repository.
 
-Dayflow aims to provide a centralized HR platform that reduces manual HR operations and improves transparency across:
+---
 
-**Employee Management → Attendance → Leave → Payroll → Reporting**
+# 📊 Main Application Workflow
 
-## 🚧 Future Enhancements
+```text
+                    ┌───────────────┐
+                    │     Signup    │
+                    └───────┬───────┘
+                            │
+                            ▼
+                    ┌───────────────┐
+                    │Email Verify   │
+                    └───────┬───────┘
+                            │
+                            ▼
+                    ┌───────────────┐
+                    │     Login     │
+                    └───────┬───────┘
+                            │
+                    ┌───────┴────────┐
+                    ▼                ▼
+             ┌────────────┐   ┌────────────┐
+             │  Employee  │   │    Admin   │
+             └─────┬──────┘   └─────┬──────┘
+                   │                │
+        ┌──────────┼─────────┐      │
+        ▼          ▼         ▼      ▼
+     Profile   Attendance  Leave  Management
+                              │      │
+                              ▼      ▼
+                           Approval Analytics
+                              │
+                              ▼
+                           Payroll
+                              │
+                              ▼
+                       PDF Salary Slip
+```
 
-* 📧 Email notifications
-* 📄 Automated PDF payslip generation
-* 📈 Advanced HR analytics
-* 🔔 Real-time notifications
-* 📅 Holiday calendar management
-* 🏢 Multi-organization support
-* ☁️ Cloud deployment and scalability improvements
-* 📱 Progressive Web App support
+---
 
-## 🤝 Contributing
+# 🗺️ Roadmap / Not Yet Implemented
 
-Contributions, issues, and feature requests are welcome. Feel free to fork the repository and submit a pull request.
+The core HRMS workflow is implemented, but the following areas can be considered future enhancements if they remain outside the current project scope:
 
-## 📄 License
+* [ ] Advanced HR reporting and downloadable reports
+* [ ] Holiday/calendar management
+* [ ] Real-time notifications
+* [ ] Multi-organization/company support
+* [ ] Advanced payroll processing and automation
+* [ ] Production deployment and cloud infrastructure
+* [ ] Automated testing and expanded test coverage
+* [ ] Progressive Web App (PWA) support
+* [ ] Additional HR modules such as recruitment and performance management
+
+These items are **not required for the current core Dayflow implementation** and should be treated as future scope rather than completed functionality.
+
+---
+
+# 🎯 Project Goals
+
+Dayflow is designed to simplify common HR operations by bringing employee and administrative workflows into one centralized system:
+
+```text
+Authentication
+      ↓
+Employee Profile
+      ↓
+Attendance
+      ↓
+Leave Management
+      ↓
+Payroll
+      ↓
+Analytics & Reporting
+```
+
+The goal is to reduce manual HR operations, improve transparency, provide secure role-based access, and give employees convenient access to their HR information.
+
+---
+
+# 🤝 Contributing
+
+Contributions, bug reports, feature suggestions, and improvements are welcome.
+
+If you would like to contribute:
+
+```bash
+git clone https://github.com/Suman-collab/HRMS-Portal.git
+cd HRMS-Portal
+```
+
+Create a feature branch, make your changes, test them locally, and submit a pull request.
+
+---
+
+# 📄 License
 
 This project is developed for educational and practical purposes.
+
+---
+
+## 📌 Dayflow at a Glance
+
+| Area                      | Status          |
+| ------------------------- | --------------- |
+| MERN architecture         | ✅ Implemented   |
+| Employee/Admin roles      | ✅ Implemented   |
+| Signup & login            | ✅ Implemented   |
+| Email verification        | ✅ Implemented   |
+| JWT authentication        | ✅ Implemented   |
+| bcrypt password hashing   | ✅ Implemented   |
+| Profile management        | ✅ Implemented   |
+| Attendance                | ✅ Implemented   |
+| Leave management          | ✅ Implemented   |
+| Leave email notifications | ✅ Implemented   |
+| Employee payroll view     | ✅ Implemented   |
+| Admin payroll editing     | ✅ Implemented   |
+| PDF salary slips          | ✅ Implemented   |
+| Admin employee list       | ✅ Implemented   |
+| Attendance analytics      | ✅ Implemented   |
+| Leave analytics           | ✅ Implemented   |
+| Advanced HR modules       | 🚧 Future scope |
+| Production deployment     | 🚧 Future scope |
