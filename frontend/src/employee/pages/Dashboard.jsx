@@ -1,171 +1,104 @@
 import React from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import api from '../../shared/api/axios';
+import { UserCircle, CalendarCheck, FileText, LogOut, ArrowRight, Activity } from 'lucide-react';
 
 const Dashboard = () => {
     const navigate = useNavigate();
 
-    // Read stored auth state
     const employeeId = localStorage.getItem('employeeId') || 'Employee';
     const email = localStorage.getItem('email') || '';
     const role = localStorage.getItem('role') || 'employee';
 
     const handleLogout = () => {
-        // Clear auth state
         localStorage.removeItem('token');
         localStorage.removeItem('role');
         localStorage.removeItem('employeeId');
         localStorage.removeItem('email');
-
-        // Clear axios default header
         delete api.defaults.headers.common['Authorization'];
-
-        // Redirect to login
         navigate('/login', { replace: true });
     };
 
-    const styles = {
-        container: {
-            fontFamily: 'system-ui, sans-serif',
-            color: '#1f2937',
-        },
-        header: {
-            marginBottom: '2rem',
-        },
-        title: {
-            fontSize: '2rem',
-            fontWeight: 'bold',
-            margin: '0 0 0.5rem 0',
-        },
-        subtitle: {
-            fontSize: '1rem',
-            color: '#4b5563',
-            margin: 0,
-        },
-        grid: {
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
-            gap: '1.5rem',
-            marginBottom: '3rem',
-        },
-        card: {
-            display: 'flex',
-            flexDirection: 'column',
-            padding: '1.5rem',
-            backgroundColor: '#fff',
-            borderRadius: '8px',
-            boxShadow: '0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1)',
-            textDecoration: 'none',
-            color: 'inherit',
-            border: '1px solid #e5e7eb',
-            transition: 'transform 0.1s ease-in-out, box-shadow 0.1s ease-in-out',
-            cursor: 'pointer',
-        },
-        cardTitle: {
-            fontSize: '1.25rem',
-            fontWeight: '600',
-            marginBottom: '0.5rem',
-            color: '#111827',
-        },
-        cardDesc: {
-            fontSize: '0.875rem',
-            color: '#6b7280',
-            marginBottom: '1rem',
-            flex: 1,
-        },
-        logoutCard: {
-            backgroundColor: '#fef2f2',
-            border: '1px solid #fecaca',
-        },
-        logoutTitle: {
-            color: '#b91c1c',
-        },
-        recentSection: {
-            backgroundColor: '#fff',
-            padding: '1.5rem',
-            borderRadius: '8px',
-            boxShadow: '0 1px 3px 0 rgb(0 0 0 / 0.1)',
-            border: '1px solid #e5e7eb',
-        },
-        recentTitle: {
-            fontSize: '1.25rem',
-            fontWeight: 'bold',
-            marginBottom: '1.25rem',
-            borderBottom: '1px solid #e5e7eb',
-            paddingBottom: '0.5rem',
-        },
-        activityList: {
-            listStyle: 'none',
-            padding: 0,
-            margin: 0,
-        },
-        activityItem: {
-            display: 'flex',
-            justifyContent: 'space-between',
-            padding: '0.75rem 0',
-            borderBottom: '1px solid #f3f4f6',
-            fontSize: '0.95rem',
-        },
-        activityItemLast: {
-            borderBottom: 'none',
-        },
-        activityTime: {
-            color: '#6b7280',
-            fontSize: '0.85rem',
-        }
-    };
-
     return (
-        <div style={styles.container}>
-            <header style={styles.header}>
-                <h1 style={styles.title}>Welcome, {employeeId}</h1>
-                <p style={styles.subtitle}>{email} &bull; {role.charAt(0).toUpperCase() + role.slice(1)}</p>
+        <div className="space-y-6">
+            <header className="mb-8">
+                <h1 className="text-2xl font-bold text-gray-900 tracking-tight">Welcome, {employeeId}</h1>
+                <p className="text-sm font-medium text-gray-500 mt-1 flex items-center gap-2">
+                    {email} <span className="w-1 h-1 rounded-full bg-gray-300"></span> <span className="capitalize">{role}</span>
+                </p>
             </header>
 
-            <div style={styles.grid}>
-                <Link to="/profile" style={styles.card}>
-                    <div style={styles.cardTitle}>Profile</div>
-                    <div style={styles.cardDesc}>View and update your personal information and details.</div>
-                    <div style={{ color: '#2563eb', fontSize: '0.875rem', fontWeight: '500' }}>Manage Profile &rarr;</div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                <Link to="/profile" className="bg-surface p-6 rounded-xl border border-gray-200 shadow-sm hover:border-primary/50 hover:shadow-md transition-all group">
+                    <div className="w-10 h-10 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center mb-4">
+                        <UserCircle size={24} />
+                    </div>
+                    <div className="text-lg font-semibold text-gray-900 mb-2">Profile</div>
+                    <div className="text-sm text-gray-500 mb-4 h-10">View and update your personal information and details.</div>
+                    <div className="text-primary text-sm font-medium flex items-center gap-1 group-hover:gap-2 transition-all">Manage Profile <ArrowRight size={16} /></div>
                 </Link>
 
-                <Link to="/attendance" style={styles.card}>
-                    <div style={styles.cardTitle}>Attendance</div>
-                    <div style={styles.cardDesc}>Check-in, check-out, and view your daily logs.</div>
-                    <div style={{ color: '#2563eb', fontSize: '0.875rem', fontWeight: '500' }}>View Logs &rarr;</div>
+                <Link to="/attendance" className="bg-surface p-6 rounded-xl border border-gray-200 shadow-sm hover:border-primary/50 hover:shadow-md transition-all group">
+                    <div className="w-10 h-10 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center mb-4">
+                        <CalendarCheck size={24} />
+                    </div>
+                    <div className="text-lg font-semibold text-gray-900 mb-2">Attendance</div>
+                    <div className="text-sm text-gray-500 mb-4 h-10">Check-in, check-out, and view your daily logs.</div>
+                    <div className="text-primary text-sm font-medium flex items-center gap-1 group-hover:gap-2 transition-all">View Logs <ArrowRight size={16} /></div>
                 </Link>
 
-                <Link to="/leave" style={styles.card}>
-                    <div style={styles.cardTitle}>Leave Requests</div>
-                    <div style={styles.cardDesc}>Apply for leaves and check your request status.</div>
-                    <div style={{ color: '#2563eb', fontSize: '0.875rem', fontWeight: '500' }}>Apply Leave &rarr;</div>
+                <Link to="/leave" className="bg-surface p-6 rounded-xl border border-gray-200 shadow-sm hover:border-primary/50 hover:shadow-md transition-all group">
+                    <div className="w-10 h-10 rounded-lg bg-amber-50 text-amber-600 flex items-center justify-center mb-4">
+                        <FileText size={24} />
+                    </div>
+                    <div className="text-lg font-semibold text-gray-900 mb-2">Leave Requests</div>
+                    <div className="text-sm text-gray-500 mb-4 h-10">Apply for leaves and check your request status.</div>
+                    <div className="text-primary text-sm font-medium flex items-center gap-1 group-hover:gap-2 transition-all">Apply Leave <ArrowRight size={16} /></div>
                 </Link>
 
-                <div style={{ ...styles.card, ...styles.logoutCard }} onClick={handleLogout}>
-                    <div style={{ ...styles.cardTitle, ...styles.logoutTitle }}>Logout</div>
-                    <div style={styles.cardDesc}>Securely sign out of your account right now.</div>
-                    <div style={{ color: '#b91c1c', fontSize: '0.875rem', fontWeight: '500' }}>Sign Out &rarr;</div>
+                <div onClick={handleLogout} className="bg-red-50/50 p-6 rounded-xl border border-red-100 shadow-sm hover:border-red-300 hover:bg-red-50 hover:shadow-md transition-all group cursor-pointer">
+                    <div className="w-10 h-10 rounded-lg bg-red-100 text-red-600 flex items-center justify-center mb-4">
+                        <LogOut size={24} />
+                    </div>
+                    <div className="text-lg font-semibold text-red-700 mb-2">Logout</div>
+                    <div className="text-sm text-red-600/70 mb-4 h-10">Securely sign out of your account right now.</div>
+                    <div className="text-red-700 text-sm font-medium flex items-center gap-1 group-hover:gap-2 transition-all">Sign Out <ArrowRight size={16} /></div>
                 </div>
             </div>
 
-            <section style={styles.recentSection}>
-                <h2 style={styles.recentTitle}>Recent Activity</h2>
-                <ul style={styles.activityList}>
-                    <li style={styles.activityItem}>
-                        <span>Checked in successfully</span>
-                        <span style={styles.activityTime}>Today at 9:02 AM</span>
+            <section className="bg-surface rounded-xl border border-gray-200 shadow-sm overflow-hidden mt-6">
+                <div className="p-6 border-b border-gray-200 flex items-center gap-2">
+                    <Activity size={20} className="text-primary" />
+                    <h2 className="text-lg font-semibold text-gray-800">Recent Activity</h2>
+                </div>
+                <ul className="divide-y divide-gray-100 p-0 m-0">
+                    <li className="p-4 sm:px-6 flex items-center justify-between hover:bg-gray-50/50 transition-colors">
+                        <span className="text-sm font-medium text-gray-700 flex items-center gap-3">
+                            <span className="w-2 h-2 rounded-full bg-emerald-500 block"></span>
+                            Checked in successfully
+                        </span>
+                        <span className="text-xs text-gray-500 font-medium">Today at 9:02 AM</span>
                     </li>
-                    <li style={styles.activityItem}>
-                        <span>Leave request approved</span>
-                        <span style={styles.activityTime}>Yesterday</span>
+                    <li className="p-4 sm:px-6 flex items-center justify-between hover:bg-gray-50/50 transition-colors">
+                        <span className="text-sm font-medium text-gray-700 flex items-center gap-3">
+                            <span className="w-2 h-2 rounded-full bg-blue-500 block"></span>
+                            Leave request approved
+                        </span>
+                        <span className="text-xs text-gray-500 font-medium">Yesterday</span>
                     </li>
-                    <li style={styles.activityItem}>
-                        <span>Checked out</span>
-                        <span style={styles.activityTime}>Aug 20 at 5:15 PM</span>
+                    <li className="p-4 sm:px-6 flex items-center justify-between hover:bg-gray-50/50 transition-colors">
+                        <span className="text-sm font-medium text-gray-700 flex items-center gap-3">
+                            <span className="w-2 h-2 rounded-full bg-amber-500 block"></span>
+                            Checked out
+                        </span>
+                        <span className="text-xs text-gray-500 font-medium">Aug 20 at 5:15 PM</span>
                     </li>
-                    <li style={{ ...styles.activityItem, ...styles.activityItemLast }}>
-                        <span>Profile information updated</span>
-                        <span style={styles.activityTime}>Aug 15</span>
+                    <li className="p-4 sm:px-6 flex items-center justify-between hover:bg-gray-50/50 transition-colors">
+                        <span className="text-sm font-medium text-gray-700 flex items-center gap-3">
+                            <span className="w-2 h-2 rounded-full bg-purple-500 block"></span>
+                            Profile information updated
+                        </span>
+                        <span className="text-xs text-gray-500 font-medium">Aug 15</span>
                     </li>
                 </ul>
             </section>

@@ -12,6 +12,7 @@ const Signup = () => {
     const [errors, setErrors] = useState({});
     const [serverStatus, setServerStatus] = useState(null); // { type: 'success' | 'error', message: '' }
     const [isLoading, setIsLoading] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
 
     const validate = () => {
         const newErrors = {};
@@ -95,144 +96,115 @@ const Signup = () => {
         }
     };
 
-    const styles = {
-        container: {
-            maxWidth: '400px',
-            margin: '2rem auto',
-            padding: '2rem',
-            boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)',
-            borderRadius: '8px',
-            fontFamily: 'system-ui, sans-serif',
-        },
-        title: {
-            fontSize: '1.5rem',
-            fontWeight: 'bold',
-            marginBottom: '1.5rem',
-            color: '#1f2937',
-            textAlign: 'center',
-        },
-        formGroup: {
-            display: 'flex',
-            flexDirection: 'column',
-            marginBottom: '1rem',
-        },
-        label: {
-            marginBottom: '0.25rem',
-            fontSize: '0.875rem',
-            fontWeight: '500',
-            color: '#374151',
-        },
-        input: {
-            padding: '0.5rem',
-            fontSize: '1rem',
-            borderRadius: '4px',
-            border: '1px solid #d1d5db',
-        },
-        errorText: {
-            color: '#ef4444',
-            fontSize: '0.75rem',
-            marginTop: '0.25rem',
-        },
-        button: {
-            width: '100%',
-            padding: '0.75rem',
-            fontSize: '1rem',
-            color: '#fff',
-            backgroundColor: '#2563eb',
-            border: 'none',
-            borderRadius: '4px',
-            cursor: 'pointer',
-            marginTop: '1rem',
-        },
-        buttonDisabled: {
-            backgroundColor: '#93c5fd',
-            cursor: 'not-allowed',
-        },
-        alert: (type) => ({
-            padding: '0.75rem',
-            borderRadius: '4px',
-            marginBottom: '1rem',
-            backgroundColor: type === 'success' ? '#dcfce7' : '#fee2e2',
-            color: type === 'success' ? '#166534' : '#991b1b',
-            fontSize: '0.875rem',
-        })
-    };
-
     return (
-        <div style={styles.container}>
-            <h2 style={styles.title}>Create Account</h2>
-
-            {serverStatus && (
-                <div style={styles.alert(serverStatus.type)}>
-                    {serverStatus.message}
-                </div>
-            )}
-
-            <form onSubmit={handleSubmit} noValidate>
-                <div style={styles.formGroup}>
-                    <label style={styles.label} htmlFor="employeeId">Employee ID</label>
-                    <input
-                        id="employeeId"
-                        name="employeeId"
-                        type="text"
-                        value={formData.employeeId}
-                        onChange={handleChange}
-                        style={styles.input}
-                    />
-                    {errors.employeeId && <span style={styles.errorText}>{errors.employeeId}</span>}
+        <div className="flex items-center justify-center min-h-[calc(100vh-61px)] bg-background w-full px-4 text-gray-900 mt-10">
+            <div className="w-full max-w-md bg-surface border border-gray-200 rounded-xl shadow-lg p-8">
+                <div className="mb-8 text-center">
+                    <h2 className="text-3xl font-bold tracking-tight text-gray-900 mb-2">Create Account</h2>
+                    <p className="text-sm text-gray-500">Join Dayflow to manage your workspace</p>
                 </div>
 
-                <div style={styles.formGroup}>
-                    <label style={styles.label} htmlFor="email">Email Address</label>
-                    <input
-                        id="email"
-                        name="email"
-                        type="email"
-                        value={formData.email}
-                        onChange={handleChange}
-                        style={styles.input}
-                    />
-                    {errors.email && <span style={styles.errorText}>{errors.email}</span>}
-                </div>
+                {serverStatus && (
+                    <div className={`mb-6 p-4 rounded-lg border text-sm font-medium ${serverStatus.type === 'success' ? 'bg-green-50 border-green-100 text-green-700' : 'bg-red-50 border-red-100 text-red-600'}`}>
+                        {serverStatus.message}
+                    </div>
+                )}
 
-                <div style={styles.formGroup}>
-                    <label style={styles.label} htmlFor="password">Password</label>
-                    <input
-                        id="password"
-                        name="password"
-                        type="password"
-                        value={formData.password}
-                        onChange={handleChange}
-                        style={styles.input}
-                    />
-                    {errors.password && <span style={styles.errorText}>{errors.password}</span>}
-                </div>
+                <form onSubmit={handleSubmit} noValidate className="space-y-5">
+                    <div>
+                        <label className="block text-sm font-semibold text-gray-700 mb-1" htmlFor="employeeId">Employee ID</label>
+                        <input
+                            id="employeeId"
+                            name="employeeId"
+                            type="text"
+                            value={formData.employeeId}
+                            onChange={handleChange}
+                            className={`w-full px-4 py-2 bg-gray-50 border ${errors.employeeId ? 'border-red-500 focus:ring-red-500' : 'border-gray-200 focus:ring-primary focus:border-primary'} rounded-lg focus:outline-none focus:ring-2 focus:ring-opacity-50 transition-colors`}
+                            placeholder="EMP-001"
+                        />
+                        {errors.employeeId && <span className="text-xs text-red-500 mt-1 block font-medium">{errors.employeeId}</span>}
+                    </div>
 
-                <div style={styles.formGroup}>
-                    <label style={styles.label} htmlFor="role">Role</label>
-                    <select
-                        id="role"
-                        name="role"
-                        value={formData.role}
-                        onChange={handleChange}
-                        style={styles.input}
+                    <div>
+                        <label className="block text-sm font-semibold text-gray-700 mb-1" htmlFor="email">Email Address</label>
+                        <input
+                            id="email"
+                            name="email"
+                            type="email"
+                            value={formData.email}
+                            onChange={handleChange}
+                            className={`w-full px-4 py-2 bg-gray-50 border ${errors.email ? 'border-red-500 focus:ring-red-500' : 'border-gray-200 focus:ring-primary focus:border-primary'} rounded-lg focus:outline-none focus:ring-2 focus:ring-opacity-50 transition-colors`}
+                            placeholder="name@company.com"
+                        />
+                        {errors.email && <span className="text-xs text-red-500 mt-1 block font-medium">{errors.email}</span>}
+                    </div>
+
+                    <div>
+                        <label className="block text-sm font-semibold text-gray-700 mb-1" htmlFor="password">Password</label>
+                        <div className="relative">
+                            <input
+                                id="password"
+                                name="password"
+                                type={showPassword ? "text" : "password"}
+                                value={formData.password}
+                                onChange={handleChange}
+                                className={`w-full px-4 py-2 pr-12 bg-gray-50 border ${errors.password ? 'border-red-500 focus:ring-red-500' : 'border-gray-200 focus:ring-primary focus:border-primary'} rounded-lg focus:outline-none focus:ring-2 focus:ring-opacity-50 transition-colors`}
+                                placeholder="••••••••"
+                            />
+                            <button
+                                type="button"
+                                onClick={() => setShowPassword(!showPassword)}
+                                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 focus:outline-none transition-colors"
+                                title={showPassword ? 'Hide password' : 'Show password'}
+                            >
+                                {showPassword ? (
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                        <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                                        <line x1="1" y1="1" x2="23" y2="23"></line>
+                                    </svg>
+                                ) : (
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                        <circle cx="12" cy="12" r="3"></circle>
+                                    </svg>
+                                )}
+                            </button>
+                        </div>
+                        {errors.password && <span className="text-xs text-red-500 mt-1 block font-medium">{errors.password}</span>}
+                    </div>
+
+                    <div>
+                        <label className="block text-sm font-semibold text-gray-700 mb-1" htmlFor="role">Role</label>
+                        <select
+                            id="role"
+                            name="role"
+                            value={formData.role}
+                            onChange={handleChange}
+                            className="w-full px-4 py-2 bg-gray-50 border border-gray-200 focus:ring-primary focus:border-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-opacity-50 transition-colors"
+                        >
+                            <option value="employee">Employee</option>
+                            <option value="admin">Admin</option>
+                        </select>
+                    </div>
+
+                    <button
+                        type="submit"
+                        className={`w-full py-2.5 px-4 rounded-lg text-white font-medium shadow-sm transition-all mt-4 ${isLoading ? 'bg-primary/70 cursor-not-allowed' : 'bg-primary hover:bg-primary/90'
+                            }`}
+                        disabled={isLoading}
                     >
-                        <option value="employee">Employee</option>
-                        <option value="admin">Admin</option>
-                    </select>
-                </div>
-
-                <button
-                    type="submit"
-                    style={{
-                        ...styles.button,
-                        ...(isLoading ? styles.buttonDisabled : {})
-                    }}
-                    disabled={isLoading}
-                >
-                    {isLoading ? 'Signing Up...' : 'Sign Up'}
-                </button>
-            </form>
+                        {isLoading ? (
+                            <span className="flex items-center justify-center gap-2">
+                                <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                </svg>
+                                Signing Up...
+                            </span>
+                        ) : 'Sign Up'}
+                    </button>
+                </form>
+            </div>
         </div>
     );
 };

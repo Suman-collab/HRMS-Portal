@@ -9,6 +9,7 @@ import profileRoutes from './src/routes/profileRoutes.js';
 import attendanceRoutes from './src/routes/attendanceRoutes.js';
 import leaveRoutes from './src/routes/leaveRoutes.js';
 import payrollRoutes from './src/routes/payrollRoutes.js';
+import authRoutes from './src/routes/authRoutes.js';
 
 dotenv.config();
 connectDB();
@@ -30,6 +31,7 @@ app.use('/api/profile', profileRoutes);
 app.use('/api/attendance', attendanceRoutes);
 app.use('/api/leave', leaveRoutes);
 app.use('/api/payroll', payrollRoutes);
+app.use('/api/auth', authRoutes);
 
 app.get('/api/health', (req, res) => {
   res.status(200).json({

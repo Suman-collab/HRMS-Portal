@@ -5,8 +5,10 @@ export const checkIn = async (req, res) => {
   try {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
+    const tomorrow = new Date(today);
+    tomorrow.setDate(tomorrow.getDate() + 1);
 
-    let record = await Attendance.findOne({ employeeId: req.user._id, date: { $gte: today } });
+    let record = await Attendance.findOne({ employeeId: req.user._id, date: { $gte: today, $lt: tomorrow } });
     if (record && record.checkIn) {
       return res.status(400).json({ success: false, message: 'Already checked in today' });
     }
@@ -17,7 +19,7 @@ export const checkIn = async (req, res) => {
       record.checkIn = new Date();
       record.status = 'Present';
     }
-    
+
     await record.save();
     res.status(200).json({ success: true, data: record });
   } catch (error) {
@@ -29,8 +31,10 @@ export const checkOut = async (req, res) => {
   try {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
+    const tomorrow = new Date(today);
+    tomorrow.setDate(tomorrow.getDate() + 1);
 
-    const record = await Attendance.findOne({ employeeId: req.user._id, date: { $gte: today } });
+    const record = await Attendance.findOne({ employeeId: req.user._id, date: { $gte: today, $lt: tomorrow } });
     if (!record || !record.checkIn) {
       return res.status(400).json({ success: false, message: 'No check-in found for today' });
     }
@@ -38,7 +42,7 @@ export const checkOut = async (req, res) => {
     record.checkOut = new Date();
     const hours = (record.checkOut - record.checkIn) / (1000 * 60 * 60);
     record.status = hours >= 6 ? 'Present' : 'Half-day';
-    
+
     await record.save();
     res.status(200).json({ success: true, data: record });
   } catch (error) {
@@ -71,7 +75,7 @@ export const getAllAttendance = async (req, res) => {
   try {
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 20;
-    
+
     const records = await Attendance.find().populate('employeeId', 'employeeId email role').sort({ date: -1 }).skip((page - 1) * limit).limit(limit).lean();
     res.status(200).json({ success: true, data: records });
   } catch (error) {

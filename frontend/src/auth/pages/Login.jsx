@@ -12,6 +12,7 @@ const Login = () => {
     const [errors, setErrors] = useState({});
     const [serverError, setServerError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
 
     const validate = () => {
         const newErrors = {};
@@ -39,7 +40,7 @@ const Login = () => {
             [name]: value,
         }));
 
-        // Clear field-level error upon change
+
         if (errors[name]) {
             setErrors((prev) => ({
                 ...prev,
@@ -102,117 +103,84 @@ const Login = () => {
         }
     };
 
-    const styles = {
-        container: {
-            maxWidth: '400px',
-            margin: '4rem auto',
-            padding: '2rem',
-            boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)',
-            borderRadius: '8px',
-            fontFamily: 'system-ui, sans-serif',
-            backgroundColor: '#fff',
-        },
-        title: {
-            fontSize: '1.5rem',
-            fontWeight: 'bold',
-            marginBottom: '1.5rem',
-            color: '#1f2937',
-            textAlign: 'center',
-        },
-        formGroup: {
-            display: 'flex',
-            flexDirection: 'column',
-            marginBottom: '1.25rem',
-        },
-        label: {
-            marginBottom: '0.25rem',
-            fontSize: '0.875rem',
-            fontWeight: '500',
-            color: '#374151',
-        },
-        input: {
-            padding: '0.5rem',
-            fontSize: '1rem',
-            borderRadius: '4px',
-            border: '1px solid #d1d5db',
-        },
-        errorText: {
-            color: '#ef4444',
-            fontSize: '0.75rem',
-            marginTop: '0.25rem',
-        },
-        button: {
-            width: '100%',
-            padding: '0.75rem',
-            fontSize: '1rem',
-            color: '#fff',
-            backgroundColor: '#2563eb',
-            border: 'none',
-            borderRadius: '4px',
-            cursor: 'pointer',
-            marginTop: '0.5rem',
-        },
-        buttonDisabled: {
-            backgroundColor: '#93c5fd',
-            cursor: 'not-allowed',
-        },
-        alertError: {
-            padding: '0.75rem',
-            borderRadius: '4px',
-            marginBottom: '1rem',
-            backgroundColor: '#fee2e2',
-            color: '#991b1b',
-            fontSize: '0.875rem',
-        }
-    };
-
     return (
-        <div style={{ backgroundColor: '#f9fafb', minHeight: '100vh', padding: '1px' }}>
-            <div style={styles.container}>
-                <h2 style={styles.title}>Sign In to Dayflow</h2>
+        <div className="flex items-center justify-center min-h-[calc(100vh-61px)] bg-background w-full px-4 text-gray-900 mt-10">
+            <div className="w-full max-w-md bg-surface border border-gray-200 rounded-xl shadow-lg p-8">
+                <div className="mb-8 text-center">
+                    <h2 className="text-3xl font-bold tracking-tight text-gray-900 mb-2">Welcome Back</h2>
+                    <p className="text-sm text-gray-500">Sign in to your Dayflow account</p>
+                </div>
 
                 {serverError && (
-                    <div style={styles.alertError}>
+                    <div className="mb-6 p-4 rounded-lg bg-red-50 border border-red-100 text-red-600 text-sm font-medium">
                         {serverError}
                     </div>
                 )}
 
-                <form onSubmit={handleSubmit} noValidate>
-                    <div style={styles.formGroup}>
-                        <label style={styles.label} htmlFor="email">Email Address</label>
+                <form onSubmit={handleSubmit} noValidate className="space-y-6">
+                    <div>
+                        <label className="block text-sm font-semibold text-gray-700 mb-1" htmlFor="email">Email Address</label>
                         <input
                             id="email"
                             name="email"
                             type="email"
                             value={formData.email}
                             onChange={handleChange}
-                            style={styles.input}
+                            className={`w-full px-4 py-2 bg-gray-50 border ${errors.email ? 'border-red-500 focus:ring-red-500' : 'border-gray-200 focus:ring-primary focus:border-primary'} rounded-lg focus:outline-none focus:ring-2 focus:ring-opacity-50 transition-colors`}
+                            placeholder="name@company.com"
                         />
-                        {errors.email && <span style={styles.errorText}>{errors.email}</span>}
+                        {errors.email && <span className="text-xs text-red-500 mt-1 block font-medium">{errors.email}</span>}
                     </div>
 
-                    <div style={styles.formGroup}>
-                        <label style={styles.label} htmlFor="password">Password</label>
-                        <input
-                            id="password"
-                            name="password"
-                            type="password"
-                            value={formData.password}
-                            onChange={handleChange}
-                            style={styles.input}
-                        />
-                        {errors.password && <span style={styles.errorText}>{errors.password}</span>}
+                    <div>
+                        <label className="block text-sm font-semibold text-gray-700 mb-1" htmlFor="password">Password</label>
+                        <div className="relative">
+                            <input
+                                id="password"
+                                name="password"
+                                type={showPassword ? "text" : "password"}
+                                value={formData.password}
+                                onChange={handleChange}
+                                className={`w-full px-4 py-2 pr-12 bg-gray-50 border ${errors.password ? 'border-red-500 focus:ring-red-500' : 'border-gray-200 focus:ring-primary focus:border-primary'} rounded-lg focus:outline-none focus:ring-2 focus:ring-opacity-50 transition-colors`}
+                                placeholder="••••••••"
+                            />
+                            <button
+                                type="button"
+                                onClick={() => setShowPassword(!showPassword)}
+                                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 focus:outline-none transition-colors"
+                                title={showPassword ? 'Hide password' : 'Show password'}
+                            >
+                                {showPassword ? (
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                        <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                                        <line x1="1" y1="1" x2="23" y2="23"></line>
+                                    </svg>
+                                ) : (
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                        <circle cx="12" cy="12" r="3"></circle>
+                                    </svg>
+                                )}
+                            </button>
+                        </div>
+                        {errors.password && <span className="text-xs text-red-500 mt-1 block font-medium">{errors.password}</span>}
                     </div>
 
                     <button
                         type="submit"
-                        style={{
-                            ...styles.button,
-                            ...(isLoading ? styles.buttonDisabled : {})
-                        }}
+                        className={`w-full py-2.5 px-4 rounded-lg text-white font-medium shadow-sm transition-all ${isLoading ? 'bg-primary/70 cursor-not-allowed' : 'bg-primary hover:bg-primary/90'
+                            }`}
                         disabled={isLoading}
                     >
-                        {isLoading ? 'Signing In...' : 'Sign In'}
+                        {isLoading ? (
+                            <span className="flex items-center justify-center gap-2">
+                                <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                </svg>
+                                Signing in...
+                            </span>
+                        ) : 'Sign In'}
                     </button>
                 </form>
             </div>

@@ -12,7 +12,7 @@ mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopol
         let admin = await User.findOne({ role: 'admin' });
         if (!admin) {
             const salt = await bcrypt.genSalt(10);
-            const hashedPassword = await bcrypt.hash('Admin@123', salt);
+            const hashedPassword = await bcrypt.hash('secretpassword', salt);
             admin = new User({
                 employeeId: 'ADM-001',
                 email: 'admin@dayflow.com',
@@ -21,13 +21,13 @@ mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopol
                 isVerified: true
             });
             await admin.save();
-            console.log('Admin user created: admin@dayflow.com / Admin@123');
+            console.log('Admin user created: admin@dayflow.com / secretpassword');
         } else {
             console.log('Admin already exists: ' + admin.email);
             const salt = await bcrypt.genSalt(10);
-            admin.password = await bcrypt.hash('Admin@123', salt);
+            admin.password = await bcrypt.hash('secretpassword', salt);
             await admin.save();
-            console.log('Admin password reset to: Admin@123');
+            console.log('Admin password reset to: secretpassword');
         }
 
         let emp = await User.findOne({ role: 'employee' });

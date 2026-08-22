@@ -12,15 +12,22 @@ export const getProfile = async (req, res) => {
             });
         }
 
-        const profile = await EmployeeProfile.findOne({ userId: id }).populate({
+        let profile = await EmployeeProfile.findOne({ userId: id }).populate({
             path: 'userId',
             select: 'employeeId email role',
         });
 
         if (!profile) {
-            return res.status(404).json({
-                success: false,
-                message: 'Employee profile not found for this user',
+            profile = await EmployeeProfile.create({
+                userId: id,
+                personalDetails: { name: 'Unknown' },
+                jobDetails: { designation: '', department: '' },
+                salaryStructure: { basic: 0, allowances: 0, deductions: 0 },
+                documents: []
+            });
+            profile = await EmployeeProfile.findById(profile._id).populate({
+                path: 'userId',
+                select: 'employeeId email role',
             });
         }
 
@@ -49,9 +56,12 @@ export const updateProfile = async (req, res) => {
         let profile = await EmployeeProfile.findOne({ userId: id });
 
         if (!profile) {
-            return res.status(404).json({
-                success: false,
-                message: 'Employee profile not found for this user',
+            profile = await EmployeeProfile.create({
+                userId: id,
+                personalDetails: { name: 'Unknown' },
+                jobDetails: { designation: '', department: '' },
+                salaryStructure: { basic: 0, allowances: 0, deductions: 0 },
+                documents: []
             });
         }
 
